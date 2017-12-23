@@ -1,0 +1,13 @@
+{
+  "db": {
+    "host": "localhost",
+    "user": "root",
+    "password": "soo2080",
+    "database": "dalab_model",
+    "port": 3306
+  },
+  "medicine_api": {
+    "data_info": "https://www.data.go.kr/dataset/15021027/openapi.do",
+    "api_key": "uKoS2h8nLZtyARxcnTC64ywVHm%2Fh0RG27jMg2mdabNVJyU%2FdnmUVRBMnMCk6stklk9ZBwAKmMtXtRxiyaHRGTg%3D%3D"
+  }
+}

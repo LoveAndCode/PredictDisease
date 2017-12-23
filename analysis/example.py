@@ -1,10 +1,12 @@
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.pylab import rcParams
-from statsmodels.tsa.stattools import adfuller
-from statsmodels.tsa.seasonal import seasonal_decompose
 import warnings
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from matplotlib.pylab import rcParams
+from statsmodels.tsa.arima_model import ARIMA
+from statsmodels.tsa.seasonal import seasonal_decompose
+from statsmodels.tsa.stattools import adfuller, acf, pacf
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
@@ -106,7 +108,62 @@ plt.legend(loc='best')
 plt.tight_layout()
 plt.show()
 
-
-
 # Forecasting a Time Series
 
+lag_acf = acf(ts_log_diff, nlags=20)
+lag_pacf = pacf(ts_log_diff, nlags=20, method='ols')
+
+#
+# Determine q, q value
+#
+
+# Plot ACF:
+plt.subplot(121)
+plt.plot(lag_acf)
+plt.axhline(y=0, linestyle='--', color='gray')
+plt.axhline(y=-1.96 / np.sqrt(len(ts_log_diff)), linestyle='--', color='gray')
+plt.axhline(y=1.96 / np.sqrt(len(ts_log_diff)), linestyle='--', color='gray')
+plt.title("Autocorrelation Function")
+
+# Plot PACF:
+plt.subplot(122)
+plt.plot(lag_pacf)
+plt.axhline(y=0, linestyle='--', color='gray')
+plt.axhline(y=-1.96 / np.sqrt(len(ts_log_diff)), linestyle='--', color='gray')
+plt.axhline(y=1.96 / np.sqrt(len(ts_log_diff)), linestyle='--', color='gray')
+plt.title('Partial Autocorrelation Function')
+plt.tight_layout()
+plt.show()
+
+#
+# AR Model
+#
+
+model = ARIMA(ts_log, order=(2, 1, 0))
+result_AR = model.fit(disp=-1)
+plt.plot(ts_log_diff)
+plt.plot(result_AR.fittedvalues, color='red')
+plt.title('RSS: %.4f' % sum((result_AR.fittedvalues - ts_log_diff) ** 2))
+plt.show()
+
+#
+# MA Model
+#
+
+model = ARIMA(ts_log, order=(0, 1, 2))
+result_MA = model.fit(disp=-1)
+plt.plot(ts_log_diff)
+plt.plot(result_MA.fittedvalues, color='red')
+plt.title('RSS: %.4f' % sum((result_MA.fittedvalues - ts_log_diff) ** 2))
+plt.show()
+
+#
+# Combined Model
+#
+
+model = ARIMA(ts_log, order=(2, 1, 2))
+results_ARIMA = model.fit(disp=-1)
+plt.plot(ts_log_diff)
+plt.plot(results_ARIMA.fittedvalues, color='red')
+plt.title('RSS: %4f' % sum((results_ARIMA.fittedvalues - ts_log_diff) ** 2))
+plt.show()
