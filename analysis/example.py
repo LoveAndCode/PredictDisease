@@ -7,6 +7,7 @@ from matplotlib.pylab import rcParams
 from statsmodels.tsa.arima_model import ARIMA
 from statsmodels.tsa.seasonal import seasonal_decompose
 from statsmodels.tsa.stattools import adfuller, acf, pacf
+from mysqldb import database as db
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
@@ -167,3 +168,4 @@ plt.plot(ts_log_diff)
 plt.plot(results_ARIMA.fittedvalues, color='red')
 plt.title('RSS: %4f' % sum((results_ARIMA.fittedvalues - ts_log_diff) ** 2))
 plt.show()
+

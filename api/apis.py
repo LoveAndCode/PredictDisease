@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 import sys
 import io
-from database import connect as atcdb
+from mysqldb import database as atcdb
 
 sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding='utf-8')
 sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding='utf-8')
@@ -46,7 +46,6 @@ class MedicineAPI:
                     print("sidoCode: ", sidoCode)
                     print("guCode: ", item.sggucd.string)
                     print("=" * 50)
-                atcdb.connection
                 atcdb.save_medicine_info(item)
         except:
             print("ERROR: THIS [", atccode, "] IS NOT MATCHED IN APIES")
