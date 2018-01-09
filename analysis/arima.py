@@ -1,21 +1,17 @@
 import warnings
 from builtins import FutureWarning
+
 import pandas as pd
-from sklearn.metrics import mean_squared_error
-from math import sqrt
-import numpy as np
-import matplotlib.pyplot as plt
 
 from analysis import util
 from mysqldb import database
-from statsmodels.tsa.arima_model import ARIMA
 
 # ignore futureWarning
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 # load all of city name in result table
-cities = database.all_city()
-
+# cities = database.all_city()
+cities = database.important_city()
 # date parser
 parsedates = lambda dates: pd.datetime.strptime(dates, "%Y%m").strftime("%Y-%m")
 
@@ -36,7 +32,7 @@ for city in cities:
     data = pd.Series(resultset['patients'].values, index=resultset['diagym'])
     print(data.head())
     print("=" * 40)
-    dataset.append(data)
+    util.train_test(data, city, True)
 
 #
 # util.test_stationartiy(dataset[0])
@@ -120,5 +116,5 @@ for city in cities:
 # plt.title('RMSE: %.3f' % rmse)
 # plt.show()
 
-for data in dataset:
-    util.train_test(data, True)
+# for data in dataset:
+#     util.train_test(data, True)

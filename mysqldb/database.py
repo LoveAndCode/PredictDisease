@@ -74,3 +74,10 @@ def all_city():
     cursor.execute(query)
     rows = cursor.fetchall()
     return rows
+
+
+def important_city():
+    query = "SELECT DISTINCT city FROM result WHERE city in ('서울특별시', '부산광역시', '인천광역시', '대구광역시', '대전광역시', '광주광역시', '울산광역시', '청주시')"
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    return rows
