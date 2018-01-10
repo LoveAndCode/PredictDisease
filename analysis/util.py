@@ -13,6 +13,9 @@ font_name = font_manager.FontProperties(fname="c:/Windows/Fonts/나눔고딕코�
 rc('font', family=font_name)
 print(font_name)
 
+# Matplotlib plot Configuration
+plt.rcParams['figure.figsize'] = (14, 5)
+plt.rcParams['figure.dpi'] = 100
 
 
 def acf_pacf(dataset):
@@ -102,11 +105,10 @@ def train_test(datset, city, plotable=False):
     print('TOTAL: %d' % len(datset.values))
     print('RMSE: %.3f' % rmse)
     if plotable:
-        plt.plot(test, label='실제 값')
-        plt.plot(predictions, color='red', label='예측결과')
+        plt.plot(test, marker='D', label='Real Data')
+        plt.plot(predictions, color='red', marker='s', label='Predict Data')
         plt.legend()
         plt.title('city: %s  RSME: %.3f' % (city[0], rmse))
+        plt.savefig("..\graph\important_city\%s.png" % city[0], format='png')
         plt.show()
-        plt.savefig(r"F:\JJH\DevProject\python\python_DALAB\graph\important_city\%s.png" % city[0], format='png',
-                    dpi=100)
     print("=" * 60)
