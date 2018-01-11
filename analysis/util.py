@@ -99,7 +99,7 @@ def train_test(datset, city, plotable=False):
     # Report performance
     mse = mean_squared_error(test, predictions)
     rmse = sqrt(mse)
-    print('city: %s' % city)
+    print('City: %s' % city)
     print('TRAIN_SIZE: %d' % train_size)
     print('TEST: %d' % len(test))
     print('TOTAL: %d' % len(datset.values))
@@ -109,6 +109,8 @@ def train_test(datset, city, plotable=False):
         plt.plot(predictions, color='red', marker='s', label='Predict Data')
         plt.legend()
         plt.title('city: %s  RSME: %.3f' % (city[0], rmse))
+        plt.xlabel('Date')
+        plt.ylabel('Number of Patients')
         plt.savefig("..\graph\important_city\%s.png" % city[0], format='png')
         plt.show()
     print("=" * 60)
