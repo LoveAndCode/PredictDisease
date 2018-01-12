@@ -1,12 +1,12 @@
-import pandas as pd
+from math import sqrt
+
 import matplotlib.pyplot as plt
-import numpy as np
+import pandas as pd
 from matplotlib import font_manager, rc
 from sklearn.metrics import mean_squared_error
-from math import sqrt
+from statsmodels.graphics.tsaplots import plot_pacf, plot_acf
 from statsmodels.tsa.arima_model import ARIMA
 from statsmodels.tsa.stattools import adfuller
-from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 
 # Korean Character Encoding For matplotlib
 font_name = font_manager.FontProperties(fname="c:/Windows/Fonts/나눔고딕코딩.ttf").get_name()
@@ -17,14 +17,19 @@ print(font_name)
 plt.rcParams['figure.figsize'] = (14, 5)
 plt.rcParams['figure.dpi'] = 100
 
+cityDic = {'서울특별시': "Seoul", "광주광역시": "GwangJu", "대구광역시": "DaeGu", "대전광역시": "DaeJeon", "부산광역시": "Busan",
+           "울산광역시": "Ulsan", "인천광역시": "Incheon", "청주시": "CheongJu"}
+
 
 def acf_pacf(dataset):
-    ts_log = np.log(dataset)
+    # ts_log = np.log(dataset)
+    ts_log = dataset
     ax1 = plt.subplot(211)
-    plot_pacf(ts_log, ax=ax1)
+    plot_acf(ts_log, ax=ax1)
     ax2 = plt.subplot(212)
     plot_pacf(ts_log, ax=ax2)
     plt.tight_layout()
+    plt.savefig("..\graph\ACF_PACF.png", format='png')
     plt.show()
 
 
@@ -68,7 +73,7 @@ def train_test(datset, city, plotable=False):
     datset.dropna(inplace=True)
 
     # Check optimal parameter for ARIMA Model
-    # acf_pacf(datset)
+    acf_pacf(datset)
 
     print("=" * 60)
     x = datset
@@ -108,9 +113,11 @@ def train_test(datset, city, plotable=False):
         plt.plot(test, marker='D', label='Real Data')
         plt.plot(predictions, color='red', marker='s', label='Predict Data')
         plt.legend()
-        plt.title('city: %s  RSME: %.3f' % (city[0], rmse))
+        plt.title('CityName: %s  RSME: %.3f' % (cityDic[city[0]], rmse))
         plt.xlabel('Date')
         plt.ylabel('Number of Patients')
         plt.savefig("..\graph\important_city\%s.png" % city[0], format='png')
         plt.show()
     print("=" * 60)
+    dic = {"realData": test, "predictData": predictions}
+    pd.DataFrame(dic).to_csv("..\graph\important_city\%s.csv" % city[0], sep=",", na_rep='NaN')
