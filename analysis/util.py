@@ -11,11 +11,15 @@ from statsmodels.tsa.stattools import adfuller
 # Korean Character Encoding For matplotlib
 font_name = font_manager.FontProperties(fname="c:/Windows/Fonts/나눔고딕코딩.ttf").get_name()
 rc('font', family=font_name)
+rc('font', weight="bold")
+rc('font', size=15)
+
 print(font_name)
 
 # Matplotlib plot Configuration
 plt.rcParams['figure.figsize'] = (14, 5)
 plt.rcParams['figure.dpi'] = 100
+
 
 cityDic = {'서울특별시': "Seoul", "광주광역시": "GwangJu", "대구광역시": "DaeGu", "대전광역시": "DaeJeon", "부산광역시": "Busan",
            "울산광역시": "Ulsan", "인천광역시": "Incheon", "청주시": "CheongJu"}
@@ -25,8 +29,12 @@ def acf_pacf(dataset):
     # ts_log = np.log(dataset)
     ts_log = dataset
     ax1 = plt.subplot(211)
+    ax1.set_xlabel("Time Lag")
+    ax1.set_ylabel("ACF")
     plot_acf(ts_log, ax=ax1)
     ax2 = plt.subplot(212)
+    ax2.set_xlabel("Time Lag")
+    ax2.set_ylabel("Partial ACF")
     plot_pacf(ts_log, ax=ax2)
     plt.tight_layout()
     plt.savefig("..\graph\ACF_PACF.png", format='png')

@@ -32,6 +32,7 @@ for city in cities:
     data = pd.Series(resultset['patients'].values, index=resultset['diagym'])
     print(data.head())
     print("=" * 40)
+    # util.test_stationartiy(data)
     util.train_test(data, city, True)
 
 #
